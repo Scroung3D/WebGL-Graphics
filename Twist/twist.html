@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <style>
+  #red, #green, #blue {
+    float: left;
+    clear: left;
+    width: 300px;
+    margin: 15px;
+  }
+  #swatch {
+    width: 120px;
+    height: 100px;
+    margin-top: 18px;
+    margin-left: 350px;
+    background-image: none;
+  }
+  #red .ui-slider-range { background: #ef2929; }
+  #red .ui-slider-handle { border-color: #ef2929; }
+  #green .ui-slider-range { background: #8ae234; }
+  #green .ui-slider-handle { border-color: #8ae234; }
+  #blue .ui-slider-range { background: #729fcf; }
+  #blue .ui-slider-handle { border-color: #729fcf; }
+  </style>
+
+  <style>
+  #red2, #green2, #blue2 {
+    float: left;
+    clear: left;
+    width: 300px;
+    margin: 15px;
+  }
+  #swatch2 {
+    width: 120px;
+    height: 100px;
+    margin-top: 18px;
+    margin-left: 350px;
+    background-image: none;
+  }
+  #red2 .ui-slider-range { background: #ef2929; }
+  #red2 .ui-slider-handle { border-color: #ef2929; }
+  #green2 .ui-slider-range { background: #8ae234; }
+  #green2 .ui-slider-handle { border-color: #8ae234; }
+  #blue2 .ui-slider-range { background: #729fcf; }
+  #blue2 .ui-slider-handle { border-color: #729fcf; }
+  </style>
+
+  <script>
+  function hexFromRGB(r, g, b) {
+    var hex = [
+      r.toString( 16 ),
+      g.toString( 16 ),
+      b.toString( 16 )
+    ];
+    $.each( hex, function( nr, val ) {
+      if ( val.length === 1 ) {
+        hex[ nr ] = "0" + val;
+      }
+    });
+    return hex.join( "" ).toUpperCase();
+  }
+  function refreshSwatch() {
+    var red = $( "#red" ).slider( "value" ),
+      green = $( "#green" ).slider( "value" ),
+      blue = $( "#blue" ).slider( "value" ),
+      hex = hexFromRGB( red, green, blue );
+    $( "#swatch" ).css( "background-color", "#" + hex );
+  }
+  $(function() {
+    $( "#red, #green, #blue" ).slider({
+      orientation: "horizontal",
+      range: "min",
+      max: 255,
+      value: 127,
+      slide: refreshSwatch,
+      change: refreshSwatch
+    });
+    $( "#red" ).slider( "value", 20 );
+    $( "#green" ).slider( "value", 40 );
+    $( "#blue" ).slider( "value", 100 );
+  });
+  </script>
+
+  <script>
+  function hexFromRGB2(r, g, b) {
+    var hex = [
+      r.toString( 16 ),
+      g.toString( 16 ),
+      b.toString( 16 )
+    ];
+    $.each( hex, function( nr, val ) {
+      if ( val.length === 1 ) {
+        hex[ nr ] = "0" + val;
+      }
+    });
+    return hex.join( "" ).toUpperCase();
+  }
+  function refreshSwatch2() {
+    var red = $( "#red2" ).slider( "value" ),
+      green = $( "#green2" ).slider( "value" ),
+      blue = $( "#blue2" ).slider( "value" ),
+      hex = hexFromRGB2( red, green, blue );
+    $( "#swatch2" ).css( "background-color", "#" + hex );
+  }
+
+  $(function() {
+    $( "#red2, #green2, #blue2" ).slider({
+      orientation: "horizontal",
+      range: "min",
+      max: 255,
+      value: 127,
+      slide: refreshSwatch2,
+      change: refreshSwatch2
+    });
+    $( "#red2" ).slider( "value", 200 );
+    $( "#green2" ).slider( "value", 40 );
+    $( "#blue2" ).slider( "value", 20 );
+  });
+  </script>
+
+	<script id="vertex-shader" type="x-shader/x-vertex">
+	attribute vec2 vPosition;
+	uniform float uAmountOfTwist;
+
+	void main(){
+		float x = vPosition.x;
+		float y = vPosition.y;
+
+		float d = sqrt(pow(x,2.0)+pow(y,2.0));
+		float theta = uAmountOfTwist;
+
+		float xx = (x * cos(d * theta)) - (y * sin(d * theta));
+		float yy = (x * sin(d * theta)) + (y * cos(d * theta));
+
+		vec2 position = vec2(xx, yy);
+		gl_Position = vec4( position, 0.0, 1.0 );
+	}
+	</script>
+
+	<script id="fragment-shader" type="x-shader/x-fragment">
+	precision mediump float;
+	uniform vec4 uTrianColor;
+
+	void main(){
+
+		gl_FragColor = vec4(uTrianColor.r, uTrianColor.g, uTrianColor.b, uTrianColor.a);
+	}
+	</script>
+	<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+	<script type="text/javascript" src="../Common/initShaders.js"></script>
+	<script type="text/javascript" src="../Common/Flatten.js"></script>
+	<script type="text/javascript" src="../Common/MV.js"></script>
+	<script type="text/javascript" src="../Assingment1/twist.js"></script>
+</head>
+<body onLoad="init()">
+
+	<table>
+  <tr>
+    <td>
+    	<div style="width:50%;"><canvas id="gl-canvas" width="600" height="600" style="background:#E0FFFF; border: 1px solid #aaaaaa; margin-right:12px">Your browser doesn't support HTML5 canvas element</canvas></div>
+    </td>
+    <td>
+    	<div style="width:600px;">
+    		<div class="ui-widget-content" style="background:#E0FFFF; width:80%; height:190px; border-radius:10px; margin-bottom:15px">
+					<p class="ui-state-default ui-corner-all ui-helper-clearfix" style="padding:4px;">
+					  <span class="ui-icon ui-icon-pencil" style="float:left; margin:-2px 5px 0 0;  display:inline-block"></span>
+					  Background Color Picker
+					</p>			 
+					<div id="red"></div>
+					<div id="green"></div>
+					<div id="blue"></div>			 
+					<div id="swatch" class="ui-widget-content ui-corner-all"></div>
+				</div>
+				<div class="ui-widget-content" style="background:#E0FFFF; width:80%; height:190px; border-radius:10px; margin-bottom:15px">
+					<p class="ui-state-default ui-corner-all ui-helper-clearfix" style="padding:4px;">
+					  <span class="ui-icon ui-icon-pencil" style="float:left; margin:-2px 5px 0 0;  display:inline-block"></span>
+					  Polygon Color Picker
+					</p>			 
+					<div id="red2"></div>
+					<div id="green2"></div>
+					<div id="blue2"></div>			 
+					<div id="swatch2" class="ui-widget-content ui-corner-all"></div>
+				</div>
+				<div class="ui-widget-content" style="background:#E0FFFF; width:80%; height:190px; border-radius:10px">
+					<p class="ui-state-default ui-corner-all ui-helper-clearfix" style="padding:4px;">
+					  <span class="ui-icon ui-icon-pencil" style="float:left; margin:-2px 5px 0 0;  display:inline-block"></span>
+					  Polygon Parameters
+					</p>
+								<label for="numSidesVal" style="display: block; text-align: center;">Number of sides:<input type="number" name="numSides" id="numSidesVal" value="3" min="3" maxlength="2" size="2" style="border: 0; color: #000000; background:#fff; width:50px; display:inline-block; margin:0 auto;"/></label>
+								<br><br>
+								<label for="amoTwistVal" style="display: block; text-align: center;">Degree of twist:<input type="number" name="amoTwist" id="amoTwistVal" value="45" min="0" maxlength="6" size="6" style="border: 0; color: #000000; background:#fff; width:50px; display:inline-block; margin:0 auto;"/>degrees</label>
+								<br><br>			
+								<label for="tesDegVal" style="display: block; text-align: center;">Tesellation degree:<input type="number" name="tesDeg" id="tesDegVal" value="4" min="0" maxlength="4" size="4" style="border: 0; color: #000000; background:#fff; width:30px; display:inline-block; margin:0 auto;"/></label>								
+				</div>
+			</div>
+    </td>
+  </tr>
+  <tr>
+  	<td colspan="6"><button id="boton" onclick="init()" style="margin:15px auto; display:block; border-radius:0; width:500px; height:45px; background-color:#008; color:white"><strong>PRESS ME TO Generate A Twisted Polygon</strong></button></td>
+  </tr>
+</table>
+
+</body>
+</html>

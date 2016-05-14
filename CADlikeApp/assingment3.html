@@ -1,0 +1,94 @@
+<!DOCTYPE>
+<html lang="en">
+<head>
+	<script type="text/javascript" src="../Assingment3/datguimin.js"></script>
+	<meta charset="utf-8">
+
+	<style type="text/css">
+      /* make the body fill the window */
+      html, body {
+        margin: 0px;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      /* make any canvas fill its container */
+      canvas {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+	<script id="vertex-shader" type="shader-x/vertex-x">
+	attribute vec3 vPosition;
+	uniform mat4 uModelView;
+
+	attribute vec4 vColor;
+	varying vec4 fColor;
+
+	void main(){
+		fColor = vColor;
+		gl_Position = uModelView * vec4( vPosition, 1.0 );
+	}
+	</script>
+	<script id="fragment-shader" type="shader-x/fragment-x">
+	precision mediump float;
+	varying vec4 fColor;
+
+	void main(){
+			gl_FragColor = fColor;		
+	}
+	</script>
+	<script id="vertex-shader2" type="shader-x/vertex-x">
+	attribute vec3 vPosition;
+	uniform mat4 uModelView;
+
+	void main(){
+		gl_Position = uModelView * vec4( vPosition, 1.0 );
+	}
+	</script>
+	<script id="fragment-shader2" type="shader-x/fragment-x">
+	precision mediump float;
+	uniform float uWidth;
+	uniform float uHeight;
+
+	void main(){
+		float aux1 = gl_FragCoord.x;
+		float aux2 = gl_FragCoord.y;
+		float aux3 = uWidth - gl_FragCoord.x - gl_FragCoord.y;
+		float temp = max(aux1, aux2);
+		float maximum = max(temp, aux3);
+		gl_FragColor = vec4( gl_FragCoord.x / uWidth, gl_FragCoord.y / uHeight, abs(uWidth - gl_FragCoord.x - gl_FragCoord.y)/maximum, 1.0);
+	}
+	</script>
+
+	<script id="vertex-shader3" type="shader-x/vertex-x">
+	attribute vec3 vPosition;
+	uniform mat4 uModelView;
+
+	void main(){
+		gl_Position = uModelView * vec4( vPosition, 1.0 );
+	}
+	</script>
+	<script id="fragment-shader3" type="shader-x/fragment-x">
+	precision mediump float;
+
+	void main(){
+		gl_FragColor = vec4( 0.9,0.9,0.9,1.0 );
+	}
+	</script>
+
+	<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+	<script type="text/javascript" src="../Common/initShaders.js"></script>
+	<script type="text/javascript" src="../Common/Flatten.js"></script>
+	<script type="text/javascript" src="../Common/MV.js"></script>
+	<script type="text/javascript" src="../Assingment3/figuras.js"></script>
+	<script type="text/javascript" src="../Assingment3/assingment3.js"></script>
+
+</head>
+<body style="background:black">
+	<iframe id="invisible" style="display:none;"></iframe>
+	<canvas id="gl-canvas">
+		Oops your browser doent support the html5 canvas element
+	</canvas>
+</body>
+</html>
